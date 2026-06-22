@@ -1,0 +1,17 @@
+# Java
+target/
+*.class
+*.iml
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# misc
+.DS_Store
+.vscode/

@@ -1,0 +1,16 @@
+name: agent-mcp
+
+services:
+  java-mcp-server:
+    build:
+      context: ./java-mcp-server
+    ports:
+      - "8086:8086"
+
+  # The Python server speaks MCP over stdio, so it is built but typically launched by an agent
+  # runner that owns the stdio pipe rather than as a long-running network service.
+  python-mcp-server:
+    build:
+      context: ./python-mcp-server
+    stdin_open: true
+    tty: true
