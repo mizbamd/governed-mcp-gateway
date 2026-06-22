@@ -7,8 +7,8 @@
 > classification, **human-in-the-loop approval** for write actions, role-based policy, and a
 > hash-chained **audit log**. The connective tissue that lets agents act on systems of record safely.
 
-Part of the [Enterprise Platform Reference Architecture](../README.md). Models "Walmart Platforms /
-agentic enablement". See [`docs/INDUSTRY-APPLICABILITY.md`](docs/INDUSTRY-APPLICABILITY.md).
+Part of the [Enterprise Platform Reference Architecture](../README.md). Models the platform
+engineering / agentic enablement domain. See [`docs/INDUSTRY-APPLICABILITY.md`](docs/INDUSTRY-APPLICABILITY.md).
 
 ## Why two languages?
 Enterprises are polyglot. The same governance model is implemented identically in
@@ -63,6 +63,7 @@ docker compose up --build
 ## Documentation
 - [System design](docs/SYSTEM-DESIGN.md)
 - [Industry applicability](docs/INDUSTRY-APPLICABILITY.md)
+- Business & governance: [BRD](docs/BRD.md) - [SOP](docs/SOP.md) - [NFR](docs/NFR.md) - [Cost savings](docs/COST-SAVINGS.md)
 - ADRs: [`docs/adr/`](docs/adr/)
 
 ## Tech

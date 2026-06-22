@@ -3,7 +3,7 @@
 Governed agentic access to systems of record is a universal enterprise need as AI agents move from
 chat to action. The governance model is the product; the tools are domain-specific.
 
-| Capability | Banking (Capital One, Citi) | Healthcare (UnitedHealth, McKesson) | Asset mgmt / PE (BlackRock, Blackstone) | Retail / Restaurant (CVS, Uline, McDonald's) |
+| Capability | Banking / Payments | Healthcare / Claims | Asset Management / Private Equity | Retail / Restaurant |
 |---|---|---|---|---|
 | READ tools | Balance/transaction lookup | Eligibility / claim status | Position / NAV lookup | Inventory / price lookup |
 | WRITE tools (HITL) | Initiate payment / adjustment | Submit claim adjustment | Place / amend order | Approve price / restock |
