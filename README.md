@@ -1,6 +1,6 @@
 # governed-mcp-gateway
 
-[![CI](https://github.com/REPLACE_ME/governed-mcp-gateway/actions/workflows/ci.yml/badge.svg)](./.github/workflows/ci.yml)
+[![CI](https://github.com/mizbamd/governed-mcp-gateway/actions/workflows/ci.yml/badge.svg)](./.github/workflows/ci.yml)
 
 > Governed **Model Context Protocol (MCP)** servers in **both Java and Python**, exposing enterprise
 > tools (ledger, pricing, search) to an LLM agent behind a governance layer: read/write sensitivity
