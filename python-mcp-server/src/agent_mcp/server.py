@@ -33,7 +33,7 @@ class McpServer:
             return protocol.success(request_id, {
                 "protocolVersion": protocol.PROTOCOL_VERSION,
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "agent-mcp-python", "version": "1.0.0"},
+                "serverInfo": {"name": "governed-mcp-gateway-python", "version": "1.0.0"},
             })
 
         if method == protocol.METHOD_TOOLS_LIST:

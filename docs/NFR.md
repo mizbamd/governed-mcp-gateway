@@ -1,4 +1,4 @@
-# Non-Functional Requirements (NFR): agent-mcp
+# Non-Functional Requirements (NFR): governed-mcp-gateway
 
 ## 1. Security (primary quality attribute)
 | ID | Requirement |

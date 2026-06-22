@@ -1,9 +1,9 @@
-# Business Requirements Document (BRD): agent-mcp
+# Business Requirements Document (BRD): governed-mcp-gateway
 
 | Field | Value |
 |---|---|
 | Document | Business Requirements Document |
-| Product | agent-mcp (governed MCP tool servers + agent client) |
+| Product | governed-mcp-gateway (governed MCP tool servers + agent client) |
 | Version | 1.0 |
 | Status | Baselined |
 | Owner | Platform Engineering / AI Governance |

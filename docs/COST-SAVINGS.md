@@ -1,4 +1,4 @@
-# Cost Savings Analysis: agent-mcp
+# Cost Savings Analysis: governed-mcp-gateway
 
 The value of this layer is primarily **risk-cost avoidance** and **integration reuse**, with some
 direct automation savings. Figures are representative ranges, not a specific company's numbers.

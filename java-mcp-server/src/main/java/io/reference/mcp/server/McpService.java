@@ -43,7 +43,7 @@ public class McpService {
             case "initialize" -> success(id, Map.of(
                     "protocolVersion", PROTOCOL_VERSION,
                     "capabilities", Map.of("tools", Map.of()),
-                    "serverInfo", Map.of("name", "agent-mcp-java", "version", "1.0.0")));
+                    "serverInfo", Map.of("name", "governed-mcp-gateway-java", "version", "1.0.0")));
             case "tools/list" -> success(id, Map.of(
                     "tools", registry.list().stream().map(Tool::toMcp).toList()));
             case "tools/call" -> handleToolsCall(id, params);

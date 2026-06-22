@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Registers the tools exposed over MCP. Backends are mocked in-memory; in production these call the
- * ledger-service, pricing-platform, and discovery-ai services of the reference architecture.
+ * ledger-service, pricing-orchestration, and agentic-rag-engine services of the reference architecture.
  */
 @Component
 public class ToolRegistry {

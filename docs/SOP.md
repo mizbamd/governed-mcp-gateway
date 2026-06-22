@@ -1,4 +1,4 @@
-# Standard Operating Procedure (SOP): agent-mcp
+# Standard Operating Procedure (SOP): governed-mcp-gateway
 
 Operational runbook for the governed MCP servers and agent client. Audience: platform / security ops.
 

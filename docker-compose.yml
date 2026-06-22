@@ -1,4 +1,4 @@
-name: agent-mcp
+name: governed-mcp-gateway
 
 services:
   java-mcp-server:

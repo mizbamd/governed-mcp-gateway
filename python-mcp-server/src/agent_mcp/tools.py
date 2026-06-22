@@ -1,7 +1,7 @@
 """Tool definitions exposed over MCP. Each tool maps to an enterprise capability.
 
 Backends are mocked in-memory here; in a real deployment these call the ledger-service,
-pricing-platform, and discovery-ai services from the wider reference architecture.
+pricing-orchestration, and agentic-rag-engine services from the wider reference architecture.
 """
 from __future__ import annotations
 

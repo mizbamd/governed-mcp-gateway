@@ -1,4 +1,4 @@
-# System Design: agent-mcp
+# System Design: governed-mcp-gateway
 
 ## 1. Problem
 Let LLM agents take actions against real enterprise systems (move money, change prices, query
