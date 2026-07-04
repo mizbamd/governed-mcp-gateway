@@ -13,7 +13,8 @@ questions a buyer asks before approving a deal.
 | `lookup_item_cost` | READ | CQRS cost projection + Redis cache | `item-cost-ledger-platform` |
 
 All three are **READ** tools — they flow through the existing policy engine without human approval.
-Every call is hash-chained in the audit log like any other tool.
+Every call is hash-chained in the audit log like any other tool. Tool arguments are redacted with
+`RETAIL` + `PCI` + `HIPAA` rule sets before the audit hash is computed — see [AUDIT-REDACTION.md](AUDIT-REDACTION.md).
 
 ## Offline vs production
 

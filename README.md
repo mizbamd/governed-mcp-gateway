@@ -36,7 +36,8 @@ flowchart LR
 | Unknown role | — | Denied |
 
 Every call -- allowed, denied, or pending approval -- is appended to a hash-chained audit log;
-`verify()` detects any tampering with history.
+`verify()` detects any tampering with history. Tool arguments are **redacted** (RETAIL + PCI + HIPAA
+rule sets) before hashing — see [AUDIT-REDACTION.md](docs/AUDIT-REDACTION.md).
 
 ## Run
 

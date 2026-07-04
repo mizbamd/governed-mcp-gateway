@@ -1,6 +1,7 @@
 package io.reference.mcp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reference.mcp.audit.AuditArgumentRedactor;
 import io.reference.mcp.audit.AuditLog;
 import io.reference.mcp.governance.PolicyEngine;
 import io.reference.mcp.server.McpService;
@@ -20,7 +21,8 @@ class McpServiceTest {
     @BeforeEach
     void setup() {
         audit = new AuditLog();
-        service = new McpService(new ToolRegistry(), new PolicyEngine(), audit, new ObjectMapper());
+        service = new McpService(new ToolRegistry(), new PolicyEngine(), audit,
+                new AuditArgumentRedactor(), new ObjectMapper());
     }
 
     private Map<String, Object> call(Map<String, Object> params) {
@@ -109,5 +111,17 @@ class McpServiceTest {
                 "name", "lookup_item_cost",
                 "arguments", Map.of("club_nbr", 4701, "item_nbr", 10001))).get("result");
         assertThat(cost.get("isError")).isEqualTo(false);
+    }
+
+    @Test
+    void auditHashesRedactedArguments() {
+        call(Map.of("name", "search_docs", "arguments", Map.of(
+                "query", "settlement", "pan", "4111111111111111")));
+        call(Map.of("name", "search_docs", "arguments", Map.of(
+                "query", "settlement", "pan", "4222222222222222")));
+        assertThat(audit.entries()).hasSize(2);
+        assertThat(audit.entries().get(0).argumentsHash())
+                .isEqualTo(audit.entries().get(1).argumentsHash());
+        assertThat(audit.verify()).isTrue();
     }
 }

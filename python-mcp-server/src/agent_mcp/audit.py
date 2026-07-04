@@ -1,10 +1,12 @@
 """Tamper-evident-ish audit log of every tool invocation and policy decision."""
 from __future__ import annotations
 
-import hashlib
 import json
+import hashlib
 import time
 from dataclasses import asdict, dataclass, field
+
+from .redaction import redact_for_audit
 
 
 @dataclass
@@ -28,8 +30,9 @@ class AuditLog:
 
     def record(self, role: str, tool: str, arguments: dict, decision: str, outcome: str) -> AuditEntry:
         prev_hash = self._entries[-1].entry_hash if self._entries else "genesis"
+        redacted = redact_for_audit(arguments)
         args_hash = hashlib.sha256(
-            json.dumps(arguments, sort_keys=True, default=str).encode("utf-8")
+            json.dumps(redacted, sort_keys=True, default=str).encode("utf-8")
         ).hexdigest()
         entry = AuditEntry(
             timestamp=time.time(),

@@ -1,6 +1,7 @@
 package io.reference.mcp.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reference.mcp.audit.AuditArgumentRedactor;
 import io.reference.mcp.audit.AuditLog;
 import io.reference.mcp.governance.PolicyEngine;
 import io.reference.mcp.governance.PolicyEngine.Decision;
@@ -23,13 +24,16 @@ public class McpService {
     private final ToolRegistry registry;
     private final PolicyEngine policy;
     private final AuditLog audit;
+    private final AuditArgumentRedactor argumentRedactor;
     private final ObjectMapper mapper;
     private final Map<String, Map<String, Object>> pendingApprovals = new ConcurrentHashMap<>();
 
-    public McpService(ToolRegistry registry, PolicyEngine policy, AuditLog audit, ObjectMapper mapper) {
+    public McpService(ToolRegistry registry, PolicyEngine policy, AuditLog audit,
+                      AuditArgumentRedactor argumentRedactor, ObjectMapper mapper) {
         this.registry = registry;
         this.policy = policy;
         this.audit = audit;
+        this.argumentRedactor = argumentRedactor;
         this.mapper = mapper;
     }
 
@@ -107,7 +111,8 @@ public class McpService {
 
     private String argsHash(Map<String, Object> arguments) {
         try {
-            return AuditLog.sha256(mapper.writeValueAsString(arguments));
+            Map<String, Object> redacted = argumentRedactor.redactForAudit(arguments);
+            return AuditLog.sha256(mapper.writeValueAsString(redacted));
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
