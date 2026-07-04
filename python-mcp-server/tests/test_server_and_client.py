@@ -13,7 +13,8 @@ def test_initialize_and_tools_list():
     assert rpc(server, "initialize")["result"]["protocolVersion"]
     tools = rpc(server, "tools/list")["result"]["tools"]
     names = {tool["name"] for tool in tools}
-    assert {"get_account_balance", "post_payment", "search_docs", "propose_price_change"} <= names
+    assert {"get_account_balance", "post_payment", "search_docs", "propose_price_change",
+            "lookup_supplier", "lookup_location", "lookup_item_cost"} <= names
 
 
 def test_read_tool_executes_without_approval():

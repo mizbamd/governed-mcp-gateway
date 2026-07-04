@@ -36,7 +36,8 @@ class McpServiceTest {
         Map<String, Object> list = service.handle(Map.of("id", 2, "method", "tools/list"));
         var tools = (java.util.List<Map<String, Object>>) ((Map<String, Object>) list.get("result")).get("tools");
         assertThat(tools).extracting(t -> t.get("name"))
-                .contains("get_account_balance", "post_payment", "search_docs", "propose_price_change");
+                .contains("get_account_balance", "post_payment", "search_docs", "propose_price_change",
+                        "lookup_supplier", "lookup_location", "lookup_item_cost");
     }
 
     @Test
@@ -91,5 +92,22 @@ class McpServiceTest {
         call(Map.of("name", "search_docs", "arguments", Map.of("query", "settlement")));
         assertThat(audit.entries()).hasSize(2);
         assertThat(audit.verify()).isTrue();
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void retailMerchandisingToolsResolveMockCatalog() {
+        Map<String, Object> supplier = (Map<String, Object>) call(Map.of(
+                "name", "lookup_supplier", "arguments", Map.of("legacy_supplier_id", "88421"))).get("result");
+        assertThat(supplier.get("isError")).isEqualTo(false);
+
+        Map<String, Object> location = (Map<String, Object>) call(Map.of(
+                "name", "lookup_location", "arguments", Map.of("location_nbr", 4701))).get("result");
+        assertThat(location.get("isError")).isEqualTo(false);
+
+        Map<String, Object> cost = (Map<String, Object>) call(Map.of(
+                "name", "lookup_item_cost",
+                "arguments", Map.of("club_nbr", 4701, "item_nbr", 10001))).get("result");
+        assertThat(cost.get("isError")).isEqualTo(false);
     }
 }

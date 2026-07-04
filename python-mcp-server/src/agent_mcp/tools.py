@@ -1,7 +1,7 @@
 """Tool definitions exposed over MCP. Each tool maps to an enterprise capability.
 
-Backends are mocked in-memory here; in a real deployment these call the ledger-service,
-pricing-orchestration, and agentic-rag-engine services from the wider reference architecture.
+Backends are mocked in-memory here; production calls ledger/pricing/RAG services plus the
+retail pillar APIs (supplier golden record, location cache, item cost ledger).
 """
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from .governance import Sensitivity
+from .retail_catalog import lookup_item_cost, lookup_location, lookup_supplier
 
 
 @dataclass(frozen=True)
@@ -66,6 +67,18 @@ def _propose_price_change(args: dict) -> dict:
     return {"status": "proposed", "sku": args["sku"], "new_price": float(args["new_price"])}
 
 
+def _lookup_supplier(args: dict) -> dict:
+    return lookup_supplier(str(args["legacy_supplier_id"]))
+
+
+def _lookup_location(args: dict) -> dict:
+    return lookup_location(int(args["location_nbr"]))
+
+
+def _lookup_item_cost(args: dict) -> dict:
+    return lookup_item_cost(int(args["club_nbr"]), int(args["item_nbr"]))
+
+
 def default_registry() -> ToolRegistry:
     registry = ToolRegistry()
     registry.register(Tool(
@@ -103,5 +116,30 @@ def default_registry() -> ToolRegistry:
             "required": ["sku", "new_price"]},
         sensitivity=Sensitivity.WRITE,
         handler=_propose_price_change,
+    ))
+    registry.register(Tool(
+        name="lookup_supplier",
+        description="Resolve a legacy supplier id to the golden supplier record (retail MDM #1).",
+        input_schema={"type": "object", "properties": {"legacy_supplier_id": {"type": "string"}},
+                      "required": ["legacy_supplier_id"]},
+        sensitivity=Sensitivity.READ,
+        handler=_lookup_supplier,
+    ))
+    registry.register(Tool(
+        name="lookup_location",
+        description="Read club/location site facts from the location reference cache (#2).",
+        input_schema={"type": "object", "properties": {"location_nbr": {"type": "integer"}},
+                      "required": ["location_nbr"]},
+        sensitivity=Sensitivity.READ,
+        handler=_lookup_location,
+    ))
+    registry.register(Tool(
+        name="lookup_item_cost",
+        description="Read effective-dated item unit cost for a club from the cost ledger (#5).",
+        input_schema={"type": "object", "properties": {
+            "club_nbr": {"type": "integer"}, "item_nbr": {"type": "integer"}},
+            "required": ["club_nbr", "item_nbr"]},
+        sensitivity=Sensitivity.READ,
+        handler=_lookup_item_cost,
     ))
     return registry

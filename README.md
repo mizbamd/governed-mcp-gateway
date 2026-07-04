@@ -31,7 +31,7 @@ flowchart LR
 ## Governance model (identical in both)
 | Tool class | Example | Policy |
 |---|---|---|
-| READ | `get_account_balance`, `search_docs` | Allowed for any known role |
+| READ | `get_account_balance`, `search_docs`, `lookup_supplier`, `lookup_location`, `lookup_item_cost` | Allowed for any known role |
 | WRITE | `post_payment`, `propose_price_change` | Requires human approval (unless trusted role) |
 | Unknown role | — | Denied |
 
@@ -59,6 +59,22 @@ mvn test
 ```bash
 docker compose up --build
 ```
+
+## Retail merchandising copilot slice
+
+Three **READ** tools wire the gateway to the retail pillar repos (mocked offline, HTTP in production):
+
+| MCP tool | Retail repo | API shape |
+|---|---|---|
+| `lookup_supplier` | [supplier-golden-record-platform](https://github.com/mizbamd/supplier-golden-record-platform) | `GET /api/suppliers/legacy/{id}` |
+| `lookup_location` | [location-reference-cache](https://github.com/mizbamd/location-reference-cache) | `GET /api/locations/{nbr}` |
+| `lookup_item_cost` | [item-cost-ledger-platform](https://github.com/mizbamd/item-cost-ledger-platform) | `GET /api/costs/clubs/{club}/items/{item}` |
+
+```bash
+cd python-mcp-server && PYTHONPATH=src python -m agent_mcp.merchandising_demo
+```
+
+See [`docs/RETAIL-MERCHANDISING-MCP.md`](docs/RETAIL-MERCHANDISING-MCP.md).
 
 ## Documentation
 - [System design](docs/SYSTEM-DESIGN.md)

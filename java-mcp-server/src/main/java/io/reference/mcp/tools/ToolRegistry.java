@@ -1,6 +1,7 @@
 package io.reference.mcp.tools;
 
 import io.reference.mcp.governance.Sensitivity;
+import io.reference.mcp.retail.RetailCatalog;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Registers the tools exposed over MCP. Backends are mocked in-memory; in production these call the
- * ledger-service, pricing-orchestration, and agentic-rag-engine services of the reference architecture.
+ * ledger-service, pricing-orchestration, agentic-rag-engine, and retail pillar APIs (#1, #2, #5).
  */
 @Component
 public class ToolRegistry {
@@ -60,6 +61,29 @@ public class ToolRegistry {
                 Sensitivity.WRITE,
                 args -> Map.of("status", "proposed", "sku", args.get("sku"),
                         "new_price", ((Number) args.get("new_price")).doubleValue())));
+
+        register(new Tool(
+                "lookup_supplier",
+                "Resolve a legacy supplier id to the golden supplier record (retail MDM #1).",
+                schema("legacy_supplier_id"),
+                Sensitivity.READ,
+                args -> RetailCatalog.lookupSupplier(String.valueOf(args.get("legacy_supplier_id")))));
+
+        register(new Tool(
+                "lookup_location",
+                "Read club/location site facts from the location reference cache (#2).",
+                intSchema("location_nbr"),
+                Sensitivity.READ,
+                args -> RetailCatalog.lookupLocation(((Number) args.get("location_nbr")).intValue())));
+
+        register(new Tool(
+                "lookup_item_cost",
+                "Read effective-dated item unit cost for a club from the cost ledger (#5).",
+                intSchema("club_nbr", "item_nbr"),
+                Sensitivity.READ,
+                args -> RetailCatalog.lookupItemCost(
+                        ((Number) args.get("club_nbr")).intValue(),
+                        ((Number) args.get("item_nbr")).intValue())));
     }
 
     private void register(Tool tool) {
@@ -78,6 +102,14 @@ public class ToolRegistry {
         Map<String, Object> properties = new LinkedHashMap<>();
         for (String field : required) {
             properties.put(field, Map.of("type", "string"));
+        }
+        return Map.of("type", "object", "properties", properties, "required", List.of(required));
+    }
+
+    private static Map<String, Object> intSchema(String... required) {
+        Map<String, Object> properties = new LinkedHashMap<>();
+        for (String field : required) {
+            properties.put(field, Map.of("type", "integer"));
         }
         return Map.of("type", "object", "properties", properties, "required", List.of(required));
     }
